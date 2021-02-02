@@ -10,4 +10,4 @@ Moderation bot written in NodeJS for [Asena Support](https://discord.gg/CRgXhfs)
 - Server member count tracker
 
 ## LICENSE
-Copyright (c) 2021 Asena Team. See the LICENSE file for license rights and limitations (MIT License).
+Copyright (c) 2021 Asena Team. See the [LICENSE](./LICENSE) file for license rights and limitations (MIT License).
