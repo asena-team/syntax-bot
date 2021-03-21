@@ -1,11 +1,11 @@
 const {
     Client,
-    TextChannel,
     MessageEmbed
 } = require('discord.js')
 const {
     Roles,
     Prefixes,
+    WikiMap,
     QuestionMap,
     URLMap
 } = require('./Constants')
@@ -118,7 +118,7 @@ const run = async () => {
     // SSS Message Find Callback
     client.on('message', async message => {
         const content = message.content
-        if(content.startsWith(Prefixes.SSS)){
+        if(content.startsWith(Prefixes.SSS)){ // SSS
             const search = Object.keys(QuestionMap).filter(key => {
                 const regex = new RegExp(`${content.substr(Prefixes.SSS.length, content.length).trim().toLowerCase()}`)
 
@@ -137,94 +137,91 @@ const run = async () => {
                     ])
                 }
             }
-        }
-    })
-
-    // Message Shortcut Callback
-    client.on('message', async message => {
-        if(message.channel instanceof TextChannel){
-            const messageContent = message.content
-            if(messageContent.startsWith(Prefixes.Shortcuts)){
-                let content, options
-                switch(messageContent.substr(Prefixes.Shortcuts.length, messageContent.length).trim().toLowerCase()){
-                    case 'davet':
-                    case 'invite':
-                        content = '**Sunucu Davet:** https://discord.gg/CRgXhfs'
-                        break
-
-                    case 'website':
-                    case 'site':
-                        content = '**Asena Website**: https://asena.xyz'
-                        break
-
-                    case 'kod':
-                    case 'code':
-                        content = 'Kod paylaşım bloğu nasıl yapılır?'
-                        options = {
-                            files: [
-                                'https://cdn.discordapp.com/attachments/729930836857716747/765936916952383499/lang.PNG'
-                            ]
-                        }
-                        break
-
-                    case 'github':
-                    case 'star':
-                        content = [
-                            '**Asena** \'nın kaynak kodlarına ulaşmak için: https://github.com/anilmisirlioglu/Asena',
-                            '**NOT:** Sağ üst köşeden projeye `star` (:star:) vermeyi unutmayın <:AsenaLogo:764464729283493908>'
-                        ]
-                        break
-
-                    case 'vote':
-                    case 'oy':
-                        content = 'Botumuzu destekleyip oy vermek için: https://top.gg/bot/716259870910840832'
-                        break
-                }
-
-                if(content){
-                    await Promise.all([
-                        message.channel.send(content, options),
-                        message.delete({ timeout: 1 })
-                    ])
-                }
-            }
-        }
-    })
-
-    client.on('message', async message => {
-        if(message.channel instanceof TextChannel){
-            if(message.content === 'top'){
-                db.all('SELECT * FROM votes ORDER BY count DESC LIMIT 10', (err, rows) => {
-                    let text = ''
-                    if(rows.length === 0){
-                        text = [
-                            'Henüz kimse oy vermemiş.',
-                            `[İlk veren olmak için tıkla.](${URLMap.TOP_GG_VOTE_URL})`
-                        ]
-                    }else{
-                        let i = 1
-                        for(const row of rows){
-                            text += message.author.id === row.user_id
-                                ?
-                                `**#${i} | <@${row.user_id}> Oy: \`${row.count}\`\n**`
-                                :
-                                `#${i} | <@${row.user_id}> Oy: \`${row.count}\`\n`
-                            i++
-                        }
+        }else if(message.content === 'top'){ // Top Voters
+            db.all('SELECT * FROM votes ORDER BY count DESC LIMIT 10', (err, rows) => {
+                let text = ''
+                if(rows.length === 0){
+                    text = [
+                        'Henüz kimse oy vermemiş.',
+                        `[İlk veren olmak için tıkla.](${URLMap.TOP_GG_VOTE_URL})`
+                    ]
+                }else{
+                    let i = 1
+                    for(const row of rows){
+                        text += message.author.id === row.user_id
+                            ?
+                            `**#${i} | <@${row.user_id}> Oy: \`${row.count}\`\n**`
+                            :
+                            `#${i} | <@${row.user_id}> Oy: \`${row.count}\`\n`
+                        i++
                     }
+                }
 
-                    const embed = new MessageEmbed()
-                        .setAuthor('📋 Sunucu Oy Sıralaması', message.author.avatarURL() || message.author.defaultAvatarURL)
-                        .setTimestamp()
-                        .setColor('GOLD')
-                        .addField('En Çok Oy Veren Kullanıcılar', text)
+                const embed = new MessageEmbed()
+                    .setAuthor('📋 Sunucu Oy Sıralaması', message.author.avatarURL() || message.author.defaultAvatarURL)
+                    .setTimestamp()
+                    .setColor('GOLD')
+                    .addField('En Çok Oy Veren Kullanıcılar', text)
 
-                    message.channel.send({ embed })
-                })
+                message.channel.send({ embed })
+            })
+        }else if(content.startsWith(Prefixes.Wiki)){ // Wiki
+            const args = content.split(' ')
+            const cmd = args[1]
+            let url = URLMap.WIKI_URL
+            if(WikiMap.Commands.includes(cmd)){
+                url += `/docs/commands/${cmd}`
+            }
+
+            await Promise.all([
+                message.channel.send(url),
+                message.delete()
+            ])
+        }else if(content.startsWith(Prefixes.Shortcuts)){ // Custom Commands
+            let text, options
+            switch(content.substr(Prefixes.Shortcuts.length, content.length).trim().toLowerCase()){
+                case 'davet':
+                case 'invite':
+                    text = '**Sunucu Davet:** https://discord.gg/CRgXhfs'
+                    break
+
+                case 'website':
+                case 'site':
+                    text = '**Asena Website**: https://asena.xyz'
+                    break
+
+                case 'kod':
+                case 'code':
+                    text = 'Kod paylaşım bloğu nasıl yapılır?'
+                    options = {
+                        files: [
+                            'https://cdn.discordapp.com/attachments/729930836857716747/765936916952383499/lang.PNG'
+                        ]
+                    }
+                    break
+
+                case 'github':
+                case 'star':
+                    text = [
+                        '**Asena** \'nın kaynak kodlarına ulaşmak için: https://github.com/anilmisirlioglu/Asena',
+                        '**NOT:** Sağ üst köşeden projeye `star` (:star:) vermeyi unutmayın <:AsenaLogo:764464729283493908>'
+                    ]
+                    break
+
+                case 'vote':
+                case 'oy':
+                    text = 'Botumuzu destekleyip oy vermek için: https://top.gg/bot/716259870910840832'
+                    break
+            }
+
+            if(text){
+                await Promise.all([
+                    message.channel.send(text, options),
+                    message.delete({ timeout: 1 })
+                ])
             }
         }
     })
-
 }
 
-setTimeout(async () => await run(), 100)
+setTimeout(run, 100)

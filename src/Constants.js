@@ -37,6 +37,15 @@ const QuestionStore = [
     }
 ]
 
+const WikiMap = {
+    Commands: [
+        'create', 'reroll', 'cancel', 'end',
+        'raffles', 'setup', 'soundaway', 'question',
+        'survey', 'locale', 'scperm', 'setprefix',
+        'ping', 'botinfo', 'help', 'invite'
+    ]
+}
+
 module.exports = {
     Roles: {
         STATUS_SUPPORTER: '744236569363218552',
@@ -45,7 +54,8 @@ module.exports = {
 
     Prefixes: {
         SSS: 'sss',
-        Shortcuts: '-'
+        Shortcuts: '-',
+        Wiki: 'w'
     },
 
     DATABASES_DIR: './databases',
@@ -53,8 +63,11 @@ module.exports = {
     URLMap: {
         TOP_GG_VOTE_URL: 'https://top.gg/bot/716259870910840832/vote',
         ASENA_PP_URL: 'https://cdn.discordapp.com/avatars/716259870910840832/cec4e60b4816baee503a4aee87a4517c.png',
-        ANONYMOUS_PP_URL: 'https://cdn.discordapp.com/attachments/729930836857716747/766784877667811378/unknown.png'
+        ANONYMOUS_PP_URL: 'https://cdn.discordapp.com/attachments/729930836857716747/766784877667811378/unknown.png',
+        WIKI_URL: 'https://wiki.asena.xyz'
     },
+
+    WikiMap,
 
     QuestionMap: {
         '1': QuestionStore[0],
