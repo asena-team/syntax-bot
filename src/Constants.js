@@ -9,7 +9,7 @@ const QuestionStore = [
     },
     {
         Q: 'Sunucuma botu ekledim fakat görünmüyor/çalışmıyor?',
-        A: 'Botun çalışmaması veya eklenip görünmemesi gibi bir durum söz konusu değil. Botun izinlerini kontrol edin ve komutları doğru şekilde kullandığınızdan emin olun.'
+        A: 'Botun çalışmaması veya eklenip görünmemesi gibi bir durum söz konusu değil. Kayıt kanalınız bulunuyorsa bot orada kalmış olabilir veya guard botunuz mevcutsa, guard botunuz tarafınızdan banlanmış olabilir. Eğer bot ban yemediyse botu sunucunun üyeler kısmında arayın. Botun izinlerini kontrol edin ve komutları doğru şekilde kullandığınızdan emin olun.'
     },
     {
         Q: 'Bu sunucunun amacı ne?',
