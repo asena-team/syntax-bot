@@ -103,5 +103,9 @@ module.exports = {
         'github': QuestionStore[8]
     },
 
-    Greetings: ['sa', 'selamün aleyküm', 'merhaba', 'sea', 'selam']
+    Greetings: [
+        'sa', 'selamün aleyküm', 'merhaba',
+        'sea', 'selam', 's.a', 'slm', 'mrb',
+        'Selamünaleyküm'
+    ]
 }
