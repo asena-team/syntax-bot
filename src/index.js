@@ -7,10 +7,13 @@ const {
     Prefixes,
     WikiMap,
     QuestionMap,
-    URLMap
+    URLMap,
+    Greetings,
+    Channels
 } = require('./Constants')
 const dotenv = require('dotenv')
 const db = require('./drivers/SQLite3')
+require('./api/ExtendedAPIMessage')
 
 dotenv.config({
     path: `${__dirname}/../.env`
@@ -18,6 +21,7 @@ dotenv.config({
 
 const run = async () => {
     const client = new Client({
+        repliedUser: true,
         fetchAllMembers: true,
         ws: {
             intents: [
@@ -119,7 +123,7 @@ const run = async () => {
     client.on('message', async message => {
         const content = message.content
         const args = content.split(' ')
-        const arg0 = args[0]?.trim()
+        const arg0 = (args[0] || "").trim()
         switch(arg0){
             case Prefixes.SSS:
                 const search = Object.keys(QuestionMap).filter(key => {
@@ -186,7 +190,17 @@ const run = async () => {
                 break
 
             default:
-                if(!content.startsWith(Prefixes.Shortcuts)) break
+                if(!content.startsWith(Prefixes.Shortcuts)){
+                    if(Greetings.includes(content.toLowerCase())){
+                        message.inlineReply([
+                            `Merhaba, **Asena Destek** sunucusuna hoşgeldiniz!`,
+                            `**>** Bot hakkında yardıma ihtiyacınız varsa ${message.channel.id !== Channels.SUPPORT_CHANNEL ? `<#${Channels.SUPPORT_CHANNEL}> kanalına,` : ''} sorununuz hakkında detaylı bilgi yazarak **Destek Ekibimizi** etiketlemekten çekinmeyin.`,
+                            `**>** Bot hakkında detaylı döküman: ${URLMap.WIKI_URL}`,
+                            `**>** Bize oy verin: ${URLMap.TOP_GG_VOTE_URL}`
+                        ]).then(message => message.suppressEmbeds())
+                    }
+                    break
+                }
 
                 let text, options
                 switch(content.substr(Prefixes.Shortcuts.length, content.length).trim().toLowerCase()){

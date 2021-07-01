@@ -49,7 +49,12 @@ const WikiMap = {
 module.exports = {
     Roles: {
         STATUS_SUPPORTER: '744236569363218552',
-        VOTE_SUPPORTER: '766789436997500950'
+        VOTE_SUPPORTER: '766789436997500950',
+        SUPPORTER_TEAM: '781569857841266748'
+    },
+
+    Channels: {
+        SUPPORT_CHANNEL: '853364057200263169',
     },
 
     Prefixes: {
@@ -96,5 +101,7 @@ module.exports = {
         '9': QuestionStore[8],
         'open source': QuestionStore[8],
         'github': QuestionStore[8]
-    }
+    },
+
+    Greetings: ['sa', 'selamün aleyküm', 'merhaba']
 }
