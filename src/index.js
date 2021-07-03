@@ -1,6 +1,7 @@
 const {
     Client,
-    MessageEmbed
+    MessageEmbed,
+    Message
 } = require('discord.js')
 const {
     Roles,
@@ -14,6 +15,7 @@ const {
 const dotenv = require('dotenv')
 const db = require('./drivers/SQLite3')
 require('./api/ExtendedAPIMessage')
+const { isValidSnowflake } = require('./utils/Utils');
 
 dotenv.config({
     path: `${__dirname}/../.env`
@@ -183,10 +185,19 @@ const run = async () => {
                     url += `/docs/commands/${cmd}`
                 }
 
-                await Promise.all([
-                    message.channel.send(url),
-                    message.delete()
-                ])
+                const answer = `Lütfen buraya göz atın: ${url}`
+                const messageId = args[2]
+                if(messageId && isValidSnowflake(messageId)){
+                    message.channel.messages.fetch(messageId).then(message => {
+                        if(message instanceof Message){
+                            message.inlineReply(answer)
+                        }
+                    }).catch(void 0)
+                }else{
+                    message.channel.send(answer)
+                }
+
+                await message.delete()
                 break
 
             default:
