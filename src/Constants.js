@@ -39,9 +39,9 @@ const QuestionStore = [
 
 const WikiMap = {
     Commands: [
-        'create', 'reroll', 'cancel', 'end',
-        'raffles', 'setup', 'soundaway', 'question',
-        'survey', 'locale', 'scperm', 'setprefix',
+        'create', 'createp', 'reroll', 'cancel', 'end',
+        'edit', 'raffles', 'setup', 'soundaway', 'question',
+        'survey', 'locale', 'scperm', 'setprefix', 'premium',
         'ping', 'botinfo', 'help', 'invite'
     ]
 }
