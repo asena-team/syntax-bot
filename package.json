@@ -14,7 +14,7 @@
     "dotenv": "^8.2.0",
     "node-cron": "^2.0.3",
     "redis": "^3.0.2",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "@types/node-cron": "^2.0.3",
