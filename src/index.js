@@ -15,7 +15,7 @@ const {
 const dotenv = require('dotenv')
 const db = require('./drivers/SQLite3')
 require('./api/ExtendedAPIMessage')
-const { isValidSnowflake } = require('./utils/Utils');
+const { isValidSnowflake, parseArgs } = require('./utils/Utils');
 
 dotenv.config({
     path: `${__dirname}/../.env`
@@ -123,8 +123,8 @@ const run = async () => {
 
     // Prefix Detect Callback
     client.on('message', async message => {
-        const content = message.content
-        const args = content.split(' ')
+        const args = await parseArgs(message)
+        const content = args.join(' ')
         const arg0 = (args[0] || "").trim()
         switch(arg0){
             case Prefixes.SSS:
