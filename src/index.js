@@ -15,7 +15,7 @@ const {
 const dotenv = require('dotenv')
 const db = require('./drivers/SQLite3')
 require('./api/ExtendedAPIMessage')
-const { isValidSnowflake, parseArgs } = require('./utils/Utils');
+const { isValidSnowflake, parseArgs, isAuthorizedRole} = require('./utils/Utils');
 
 dotenv.config({
     path: `${__dirname}/../.env`
@@ -176,6 +176,76 @@ const run = async () => {
 
                     message.channel.send({ embed })
                 })
+                break
+
+            case 'run':
+                const cmdArgs = args.slice(1, args.length)
+                switch(cmdArgs[0]){
+                    case 'ast':
+                        if(!isAuthorizedRole(message.member.roles)){
+                            await message.channel.send('Bu komut kullanmak için yetkiniz yok.')
+                            break
+                        }
+
+                        if(cmdArgs.length < 3){
+                            await message.channel.send('**Kullanımı:** run ast <add | kick> [user id]')
+                            break
+                        }
+
+                        const [, transaction, userId] = cmdArgs
+                        if(!isValidSnowflake(userId)){
+                            await message.channel.send('Lütfen geçerli bir **Üye ID**\'si girin.')
+                            break
+                        }
+
+                        const member = message.guild.members.cache.get(userId)
+                        if(!member){
+                            await message.channel.send('Üye bulunamadı.')
+                            break
+                        }
+
+                        switch(transaction){
+                            case 'add':
+                                if(member.roles.cache.has(Roles.SUPPORT_TEAM)){
+                                    await message.channel.send('Bu üye zaten destek ekibinde.')
+                                    break
+                                }
+
+                                member.roles.add(Roles.SUPPORT_TEAM).then(async() => {
+                                    message.channel.send(`${member}, destek ekibine başarıyla eklendi.`)
+                                    member.createDM().then(dm => {
+                                        dm.send([
+                                            '**Asena** Destek Ekibine hoşgeldin! 🎉',
+                                            `**-** Asena hakkında bilmediğin bir çok şeyi buradan bulabilirsin: ${URLMap.WIKI_URL}`,
+                                            '**-** Ekip hakkındaki güncellemeleri kaçırmamak için **#moderatör-duyuru** kanalına göz atmayı unutma.'
+                                        ])
+                                    })
+                                })
+                                break
+
+                            case 'kick':
+                                if(!member.roles.cache.has(Roles.SUPPORT_TEAM)){
+                                    await message.channel.send('Bu üye zaten destek ekibinde değil.')
+                                    break
+                                }
+
+                                member.roles.remove(Roles.SUPPORT_TEAM).then(() => {
+                                    message.channel.send(`${member}, destek ekibinden başarıyla çıkarıldı.`)
+                                    member.createDM().then(dm => {
+                                        dm.send([
+                                            '**Asena** ekibine zaman ayırdığın ve bugüne kadar verdiğin destekler için teşekkür ederiz. En yakın zamanda seni tekrar aramızda görebilmek dileğiyle hoşçakal.',
+                                            `**İşlemi Yapan Yetkili:** ${message.member}`
+                                        ])
+                                    })
+                                })
+                                break
+                        }
+                        break
+
+                    default:
+                        await message.channel.send('Komut bulunamadı.')
+                        break
+                }
                 break
 
             case Prefixes.Wiki:

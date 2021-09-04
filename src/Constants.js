@@ -46,12 +46,17 @@ const WikiMap = {
     ]
 }
 
+const Roles = {
+    OWNER: '712448714660249641',
+    STATUS_SUPPORTER: '744236569363218552',
+    VOTE_SUPPORTER: '766789436997500950',
+    SUPPORT_TEAM: '781569857841266748',
+    SUPPORT_TEAM_LEAD: '877246064535674900',
+    MODERATOR: '729930285654736950',
+}
+
 module.exports = {
-    Roles: {
-        STATUS_SUPPORTER: '744236569363218552',
-        VOTE_SUPPORTER: '766789436997500950',
-        SUPPORTER_TEAM: '781569857841266748'
-    },
+    Roles,
 
     Channels: {
         SUPPORT_CHANNEL: '853364057200263169',
@@ -60,6 +65,7 @@ module.exports = {
     Prefixes: {
         SSS: 'sss',
         Shortcuts: '-',
+        Command: 'run',
         Wiki: 'w'
     },
 
@@ -107,5 +113,11 @@ module.exports = {
         'sa', 'selamün aleyküm', 'merhaba',
         'sea', 'selam', 's.a', 'slm', 'mrb',
         'Selamünaleyküm'
+    ],
+
+    AST_AUTHORIZED_ROLES: [
+        Roles.OWNER,
+        Roles.MODERATOR,
+        Roles.SUPPORT_TEAM_LEAD
     ]
 }
