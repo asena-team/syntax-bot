@@ -15,7 +15,9 @@ const {
 const dotenv = require('dotenv')
 const db = require('./drivers/SQLite3')
 require('./api/ExtendedAPIMessage')
-const { isValidSnowflake, parseArgs, isAuthorizedRole} = require('./utils/Utils');
+const { isValidSnowflake, parseArgs, isAuthorizedRole } = require('./utils/Utils')
+
+process.on('unhandledRejection', console.log)
 
 dotenv.config({
     path: `${__dirname}/../.env`
