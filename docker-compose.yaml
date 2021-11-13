@@ -21,6 +21,6 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - "./databases/syntax.db:/mnt/syntax-bot/databases/syntax.db"
+      - /var/local/syntax-bot/databases:/usr/app/databases
     networks:
       - internal
