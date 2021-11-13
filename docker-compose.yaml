@@ -1,0 +1,22 @@
+version: '3.4'
+networks:
+  internal:
+    driver: bridge
+
+services:
+  redis:
+    image: redis
+    container_name: syntax-cache
+    ports:
+      - "6379:6379"
+    networks:
+      - internal
+
+  syntax-bot:
+    build: ./
+    links:
+      - redis
+    environment:
+      - REDIS_HOST=syntax-cache
+    networks:
+      - internal
