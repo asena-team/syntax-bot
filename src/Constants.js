@@ -42,7 +42,7 @@ const WikiMap = {
         'create', 'createp', 'reroll', 'cancel', 'end',
         'edit', 'raffles', 'setup', 'soundaway', 'question',
         'survey', 'locale', 'scperm', 'setprefix', 'premium',
-        'ping', 'botinfo', 'help', 'invite'
+        'ping', 'botinfo', 'help', 'invite', 'fix'
     ]
 }
 
